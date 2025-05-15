@@ -1,12 +1,24 @@
-const ProductServices = require('../services/ProductServices');
+const {
+  BrandListService,
+  CategoryListService,
+  SliderListService,
+  ProductListService,
+  ListByBrandService,
+  ListByCategoryService,
+  ListBySimilarService,
+  ListByRemarkService,
+  ListByKeywordService,
+  ProductDetailsListService,
+  ProductReviewListService,
+  ReviewService
+} = require('../services/ProductServices'); 
 
 exports.ProductBrandList = async (req, res) => {
-    try {
-        const brands = await ProductServices.BrandListService();
-        res.json(brands);
-    } catch (error) {
-        res.status(500).json({ message: 'Failed to fetch brands', error });
+    const result = await BrandListService();
+    if (result.status === 'error') {
+        return res.status(500).json(result);
     }
+    res.json(result);
 };
 
 exports.ProductCategoryList = async (req, res) => {
@@ -19,33 +31,47 @@ exports.ProductCategoryList = async (req, res) => {
 };
 
 exports.ProductSliderList = async (req, res) => {
-    try {
-        const sliders = await ProductServices.SliderListService();
-        res.json(sliders);
-    } catch (error) {
-        res.status(500).json({ message: 'Failed to fetch sliders', error });
-    }
+  try {
+    const sliders = await ProductServices.SliderListService();
+    res.status(200).json(sliders);
+  } catch (error) {
+    console.error("Error fetching sliders:", error);
+    res.status(500).json({ message: "Failed to fetch sliders", error: error.message || error });
+  }
 };
 
+
 exports.ProductListByBrand = async (req, res) => {
-    try {
-        const { brandID } = req.params;
-        const products = await ProductServices.ListByBrandService(brandID);
-        res.json(products);
-    } catch (error) {
-        res.status(500).json({ message: 'Failed to fetch products by brand', error });
+    const result = await ListByBrandService(req);
+    if (result.status === 'error') {
+        return res.status(400).json(result);
     }
+    res.json(result);
 };
+
+
+
 
 exports.ProductListByCategory = async (req, res) => {
     try {
-        const { categoryID } = req.params;
-        const products = await ProductServices.ListByCategoryService(categoryID);
-        res.json(products);
+        const result = await ListByCategoryService(req);
+
+        if (result.status === 'error') {
+            return res.status(500).json(result);
+        }
+
+        if (result.status === 'warning') {
+            return res.status(200).json(result);  
+        }
+
+        // Normal success response
+        res.status(200).json(result);
+
     } catch (error) {
-        res.status(500).json({ message: 'Failed to fetch products by category', error });
+        res.status(500).json({ status: 'error', message: error.message });
     }
 };
+
 
 exports.ProductListBySimilar = async (req, res) => {
     try {

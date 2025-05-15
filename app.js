@@ -15,6 +15,6 @@ app.get('/', (req, res) =>{
     res.send('Xevonto API is working...');
 })
 
-app.use('/api', router)
+app.use('/api/v1', router)
 
 module.exports = app;
