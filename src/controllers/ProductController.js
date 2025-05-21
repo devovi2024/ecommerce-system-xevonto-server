@@ -4,9 +4,9 @@ const ProductServices = require('../services/ProductServices');
 exports.ProductBrandList = async (req, res) => {
   try {
     const data = await ProductServices.BrandListService();
-    res.status(data.status === 'error' ? 500 : 200).json(data);
+    return res.status(data.status === 'error' ? 500 : 200).json(data);
   } catch (error) {
-    res.status(500).json({ status: 'error', message: error.message });
+    return res.status(500).json({ status: 'error', message: error.message });
   }
 };
 
@@ -14,9 +14,9 @@ exports.ProductBrandList = async (req, res) => {
 exports.ProductCategoryList = async (req, res) => {
   try {
     const data = await ProductServices.CategoryListService();
-    res.status(data.status === 'error' ? 500 : 200).json(data);
+    return res.status(data.status === 'error' ? 500 : 200).json(data);
   } catch (error) {
-    res.status(500).json({ status: 'error', message: error.message });
+    return res.status(500).json({ status: 'error', message: error.message });
   }
 };
 
@@ -24,9 +24,9 @@ exports.ProductCategoryList = async (req, res) => {
 exports.ProductSliderList = async (req, res) => {
   try {
     const data = await ProductServices.SliderListService();
-    res.status(data.status === 'error' ? 500 : 200).json(data);
+    return res.status(data.status === 'error' ? 500 : 200).json(data);
   } catch (error) {
-    res.status(500).json({ status: 'error', message: error.message });
+    return res.status(500).json({ status: 'error', message: error.message });
   }
 };
 
@@ -34,25 +34,71 @@ exports.ProductSliderList = async (req, res) => {
 exports.ProductList = async (req, res) => {
   try {
     const data = await ProductServices.ProductListService();
-    res.status(data.status === 'error' ? 500 : 200).json(data);
+    return res.status(data.status === 'error' ? 500 : 200).json(data);
   } catch (error) {
-    res.status(500).json({ status: 'error', message: error.message });
+    return res.status(500).json({ status: 'error', message: error.message });
   }
 };
 
 // Get products by brand ID
 exports.ListByBrand = async (req, res) => {
   const brandID = req.params.brandID;
-
   try {
     const result = await ProductServices.ListByBrandService(brandID);
-
     if (result.status === 'success') {
-      res.status(200).json(result);
+      return res.status(200).json(result);
     } else {
-      res.status(400).json(result);
+      return res.status(400).json(result);
     }
   } catch (error) {
-    res.status(500).json({ status: 'error', message: error.message });
+    return res.status(500).json({ status: 'error', message: error.message });
+  }
+};
+
+// Get products by category ID
+exports.ListByCategory = async (req, res) => {
+  const categoryID = req.params.categoryID;
+  try {
+    const result = await ProductServices.ListByCategoryService(categoryID);
+    if (result.status === 'success') {
+      return res.status(200).json(result);
+    } else {
+      return res.status(400).json(result);
+    }
+  } catch (error) {
+    return res.status(500).json({ status: 'error', message: error.message });
+  }
+};
+
+
+// Get similar products by product ID
+exports.ProductListBySimiler = async (req, res) => {
+  const productID = req.params.productID;
+  try {
+    const result = await ProductServices.ProductListBySimilerService(productID);
+    if (result.status === 'success') {
+      return res.status(200).json(result);
+    } else {
+      return res.status(400).json(result);
+    }
+  } catch (error) {
+    return res.status(500).json({ status: 'error', message: error.message });
+  }
+};
+
+
+
+exports.ProductDetails = async (req, res) => {
+  const productID = req.params.productID;
+
+  try {
+    const result = await ProductServices.ProductDetailsService(productID);
+    if (result.status === 'success') {
+      return res.status(200).json(result);
+    } else {
+      return res.status(400).json(result);
+    }
+  } catch (error) {
+    return res.status(500).json({ status: 'error', message: error.message });
   }
 };

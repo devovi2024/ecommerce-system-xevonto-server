@@ -12,4 +12,4 @@ const DataSchema = mongoose.Schema({
 });
 
 const ProductSliderModel = mongoose.model('productSlider', DataSchema);
-module.exports = ProductSliderModel; // ✅ CommonJS export
+module.exports = ProductSliderModel; 
